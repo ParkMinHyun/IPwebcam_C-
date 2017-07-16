@@ -14,12 +14,14 @@ namespace IPwebcam
     public partial class Form1 : Form
     {
         MjpegDecoder mjp;
+        private bool flag = false;
         public Form1()
         {
             InitializeComponent();
+            
             mjp = new MjpegDecoder();
             mjp.FrameReady += mjp_frameReady;
-            mjp.ParseStream(new Uri("http://192.168.0.23:8080/videofeed"));
+            mjp.ParseStream(new Uri("http://172.30.1.49:8080/videofeed"));
         }
 
 
@@ -30,6 +32,21 @@ namespace IPwebcam
             Image img = pictureBox1.Image;
             img.RotateFlip(RotateFlipType.Rotate180FlipX);
             pictureBox1.Image = img;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (flag.Equals(false))
+            {
+                mjp.StopStream();
+                flag = true;
+            }
+
+            else
+            {
+                mjp.ParseStream(new Uri("http://172.30.1.49:8080/videofeed"));
+                flag = false;
+            }
         }
     }
 }
